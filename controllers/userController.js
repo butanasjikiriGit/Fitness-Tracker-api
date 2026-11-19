@@ -10,27 +10,44 @@ module.exports.registerUser = (req, res) => {
 
 	const { email, password } = req.body;
 
-	const newUser = new User({
-		email: email,
-		password: bcrypt.hashSync(password, 10)
-	})
+	if (!email || !email.includes('@')){
+		return res.status(400).send({
+			message: 'Invalid email format'
+		})
+	}
 
-	return newUser.save()
-	.then((result) => {
-		if (!result){
-			return res.status(400).send({
-				message: 'Failed to register'
+	return User.findOne({ email: email})
+	.then((existing) => {
+		if (existing){
+			return res.status(409).send({
+				message: 'Email already registered'
 			})
 		} else {
-			return res.status(200).send({
-				message: 'Registered successfully'
+
+			const newUser = new User({
+				email: email,
+				password: bcrypt.hashSync(password, 10)
 			})
+
+			return newUser.save()
+			.then((result) => {
+				if (!result){
+					return res.status(400).send({
+						message: 'Failed to register'
+					})
+				} else {
+					return res.status(200).send({
+						message: 'Registered successfully'
+					})
+				}
+			})
+			.catch((err) => {
+				return res.status(500).send({
+					message: 'Internal Server Error'
+				})
+			})
+
 		}
-	})
-	.catch((err) => {
-		return res.status(500).send({
-			message: 'Internal Server Error'
-		})
 	})
 
 }
