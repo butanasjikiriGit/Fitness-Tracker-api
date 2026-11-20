@@ -170,3 +170,32 @@ module.exports.completeWorkoutStatus = (req, res) => {
 	})
 
 }
+
+
+
+
+
+
+
+// Get specific workout
+module.exports.getWorkouts = (req, res) => {
+
+	const workoutId = req.params.workout_Id;
+
+	return Workout.findById(workoutId)
+	.then((result) => {
+		if (!result){
+			return res.status(400).send({
+				message: 'Workout does not exist'
+			})
+		} else {
+			return res.status(200).send(result)
+		}
+	})
+	.catch((err) => {
+		return res.status(500).send({
+			error: 'Internal Server Error'
+		})
+	})
+
+}

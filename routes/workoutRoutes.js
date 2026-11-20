@@ -14,6 +14,8 @@ router.delete('/deleteWorkout/:workout_Id', verify, workoutController.deleteWork
 
 router.patch('/completeWorkoutStatus/:workout_Id', verify, workoutController.completeWorkoutStatus);
 
+router.get('/getWorkouts/:workout_Id', verify, workoutController.getWorkouts);
+
 
 
 
