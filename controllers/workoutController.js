@@ -5,12 +5,13 @@ const Workout = require('../models/Workout.js');
 // Add workout
 module.exports.addWorkout = (req, res) => {
 
-	const { name, duration, userId } = req.body;
+	const id = req.user.id;
+	const { name, duration, } = req.body;
 
 	const newWorkout = new Workout({
 		name: name,
 		duration: duration,
-		userId: userId
+		userId: id
 	})
 
 	return newWorkout.save()
